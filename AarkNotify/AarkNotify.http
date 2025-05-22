@@ -1,0 +1,6 @@
+@AarkNotify_HostAddress = http://localhost:5043
+
+GET {{AarkNotify_HostAddress}}/key/title/content
+Accept: application/json
+
+###

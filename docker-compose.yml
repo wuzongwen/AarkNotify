@@ -1,0 +1,13 @@
+services:
+  aarknotify:
+    image: ${DOCKER_REGISTRY-}aarknotify
+    build:
+      context: .
+      dockerfile: AarkNotify/Dockerfile
+    ports:
+      - "8131:8080"
+    volumes:
+      - ./data:/app/data:rw,Z
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - TZ=Asia/Shanghai
