@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace AarkNotify.Middleware
 {
@@ -35,7 +37,7 @@ namespace AarkNotify.Middleware
                 {
                     context.Response.StatusCode = 500;
                     context.Response.ContentType = "text/plain; charset=utf-8";
-                    context.Response.WriteAsync("系统错误，请稍后再试").Wait();
+                    await context.Response.WriteAsync(JsonConvert.SerializeObject(new { code = 400, message = "系统错误，请稍后再试", timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() }));
                     return;
                 }
 
@@ -44,7 +46,7 @@ namespace AarkNotify.Middleware
                 {
                     context.Response.StatusCode = 403;
                     context.Response.ContentType = "text/plain; charset=utf-8";
-                    await context.Response.WriteAsync("禁止访问");
+                    await context.Response.WriteAsync(JsonConvert.SerializeObject(new { code = 400, message = "禁止访问", timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() }));
                     return;
                 }
 
@@ -80,14 +82,14 @@ namespace AarkNotify.Middleware
                             dbContext.SaveChangesAsync();
                             context.Response.StatusCode = 403;
                             context.Response.ContentType = "text/plain; charset=utf-8";
-                            context.Response.WriteAsync("禁止访问");
+                            context.Response.WriteAsync(JsonConvert.SerializeObject(new { code = 400, message = "禁止访问", timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() }));
                             return;
                         }
 
                         context.Response.StatusCode = 429;
                         context.Response.Headers["Retry-After"] = "60";
                         context.Response.ContentType = "text/plain; charset=utf-8";
-                        context.Response.WriteAsync("请求过于频繁，请一分钟后再请求，否则IP将被拉黑").Wait();
+                        context.Response.WriteAsync(JsonConvert.SerializeObject(new { code = 400, message = "请求过于频繁，请一分钟后再请求，否则IP将被拉黑", timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() }));
                         return;
                     }
                 }
