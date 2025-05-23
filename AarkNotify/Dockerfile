@@ -26,6 +26,8 @@ RUN dotnet publish "./AarkNotify.csproj" -c $BUILD_CONFIGURATION -o /app/publish
 FROM base AS final
 WORKDIR /app
 # 设置数据库路径环境变量
-ENV DB_PATH=/app/data/aarknotify.db
+ENV DB_PATH=/app/data/db/aarknotify.db
+ENV LOG_PATH=/app/data/logs/
+ENV DEBUG=false
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "AarkNotify.dll"]

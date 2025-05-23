@@ -32,10 +32,40 @@ namespace AarkNotify.Controllers
             return Ok(new { code = 400, message = "消息发送失败", timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() });
         }
 
+        // 有标题
+        [HttpPost]
+        [Route("{key}/{title}/{body}")]
+        public async Task<IActionResult> NotifyWithTitlePost(string key, string title, string body)
+        {
+            MsgModel msgModel = new MsgModel();
+            msgModel.Title = title;
+            msgModel.Content = body;
+            if (await Notify(msgModel, key))
+            {
+                return Ok(new { code = 200, message = "success", timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() });
+            }
+            return Ok(new { code = 400, message = "消息发送失败", timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() });
+        }
+
         // 无标题（只有内容）
         [HttpGet]
         [Route("{key}/{body}")]
         public async Task<IActionResult> NotifyNoTitle(string key, string body)
+        {
+            MsgModel msgModel = new MsgModel();
+            msgModel.Title = body;
+            msgModel.Content = body;
+            if (await Notify(msgModel, key))
+            {
+                return Ok(new { code = 200, message = "success", timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() });
+            }
+            return Ok(new { code = 400, message = "消息发送失败", timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() });
+        }
+
+        // 无标题（只有内容）
+        [HttpPost]
+        [Route("{key}/{body}")]
+        public async Task<IActionResult> NotifyNoTitlePost(string key, string body)
         {
             MsgModel msgModel = new MsgModel();
             msgModel.Title = body;

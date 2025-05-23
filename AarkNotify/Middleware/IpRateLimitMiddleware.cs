@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AarkNotify.Helper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -22,7 +23,7 @@ namespace AarkNotify.Middleware
         {
             try
             {
-                var ip = context.Connection.RemoteIpAddress?.ToString();
+                var ip = NetWorkHelper.GetClientIp(context);
 
                 if (string.IsNullOrEmpty(ip))
                 {
@@ -105,5 +106,4 @@ namespace AarkNotify.Middleware
             await _next(context);
         }
     }
-
 }
