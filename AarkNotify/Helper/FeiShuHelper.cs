@@ -75,7 +75,7 @@ namespace AarkNotify.Helper
             textModel.sign = sign.Sign;
             textModel.content = new TextContent
             {
-                text = msg.Content
+                text = msg.Title + "\r\n" + msg.Content
             };
             textModel.msg_type = "text";
             return textModel;

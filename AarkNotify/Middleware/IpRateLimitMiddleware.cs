@@ -72,7 +72,7 @@ namespace AarkNotify.Middleware
 
                     if (_ipAccessLog[ip].Count > systemSettings.Limit)
                     {
-                        if (_ipAccessLog[ip].Count >= 15) 
+                        if (_ipAccessLog[ip].Count >= systemSettings.BlackListLimit) 
                         {
                             systemSettings.BlackList += $",{ip}";
                             dbContext.SystemSettings.Update(systemSettings);
